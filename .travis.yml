@@ -19,7 +19,7 @@ matrix:
                       - libxcursor-dev
                       - libxi-dev
           env:
-              - BUILD_SHARED_LIBS=ON
+              - GLFW_BUILD_SHARED_LIBS=ON
               - CFLAGS=-Werror
         - os: linux
           dist: xenial
@@ -33,7 +33,7 @@ matrix:
                       - libxcursor-dev
                       - libxi-dev
           env:
-              - BUILD_SHARED_LIBS=OFF
+              - GLFW_BUILD_SHARED_LIBS=OFF
               - CFLAGS=-Werror
         - os: linux
           dist: xenial
@@ -50,7 +50,7 @@ matrix:
                       - libegl1-mesa-dev
           env:
               - USE_WAYLAND=ON
-              - BUILD_SHARED_LIBS=ON
+              - GLFW_BUILD_SHARED_LIBS=ON
               - CFLAGS=-Werror
         - os: linux
           dist: xenial
@@ -67,20 +67,20 @@ matrix:
                       - libegl1-mesa-dev
           env:
               - USE_WAYLAND=ON
-              - BUILD_SHARED_LIBS=OFF
+              - GLFW_BUILD_SHARED_LIBS=OFF
               - CFLAGS=-Werror
         - os: osx
           sudo: false
           name: "Cocoa shared library"
           env:
-              - BUILD_SHARED_LIBS=ON
+              - GLFW_BUILD_SHARED_LIBS=ON
               - CFLAGS=-Werror
               - MACOSX_DEPLOYMENT_TARGET=10.8
         - os: osx
           sudo: false
           name: "Cocoa static library"
           env:
-              - BUILD_SHARED_LIBS=OFF
+              - GLFW_BUILD_SHARED_LIBS=OFF
               - CFLAGS=-Werror
               - MACOSX_DEPLOYMENT_TARGET=10.8
 script:
@@ -96,7 +96,7 @@ script:
           git checkout 1.15 && ./autogen.sh --prefix=/usr && make && sudo make install;
           popd;
       fi
-    - cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} -DGLFW_USE_WAYLAND=${USE_WAYLAND} ..
+    - cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DGLFW_BUILD_SHARED_LIBS=${GLFW_BUILD_SHARED_LIBS} -DGLFW_USE_WAYLAND=${USE_WAYLAND} ..
     - cmake --build .
 notifications:
     email:

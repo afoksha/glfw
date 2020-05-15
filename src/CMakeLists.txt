@@ -1,8 +1,14 @@
-
-add_library(glfw "${GLFW_SOURCE_DIR}/include/GLFW/glfw3.h"
+if (GLFW_BUILD_SHARED_LIBS)
+add_library(glfw SHARED "${GLFW_SOURCE_DIR}/include/GLFW/glfw3.h"
                  "${GLFW_SOURCE_DIR}/include/GLFW/glfw3native.h"
                  internal.h mappings.h context.c init.c input.c monitor.c
                  vulkan.c window.c)
+else()
+add_library(glfw STATIC "${GLFW_SOURCE_DIR}/include/GLFW/glfw3.h"
+                 "${GLFW_SOURCE_DIR}/include/GLFW/glfw3native.h"
+                 internal.h mappings.h context.c init.c input.c monitor.c
+                 vulkan.c window.c)
+endif()
 
 if (_GLFW_COCOA)
     target_sources(glfw PRIVATE cocoa_platform.h cocoa_joystick.h posix_thread.h
@@ -72,7 +78,7 @@ if (_GLFW_WAYLAND)
     target_sources(glfw PRIVATE ${GLFW_WAYLAND_PROTOCOL_SOURCES})
 endif()
 
-if (WIN32 AND BUILD_SHARED_LIBS)
+if (WIN32 AND GLFW_BUILD_SHARED_LIBS)
     configure_file(glfw.rc.in glfw.rc @ONLY)
     target_sources(glfw PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/glfw.rc")
 endif()
@@ -136,7 +142,7 @@ if (MINGW)
     target_compile_definitions(glfw PRIVATE UNICODE WINVER=0x0501)
 endif()
 
-if (BUILD_SHARED_LIBS)
+if (GLFW_BUILD_SHARED_LIBS)
     if (WIN32)
         if (MINGW)
             # Remove the dependency on the shared version of libgcc
